@@ -1,0 +1,15 @@
+click==7.1.2
+Flask==1.1.2
+flask-marshmallow==0.14.0
+Flask-SQLAlchemy==2.5.1
+greenlet==1.0.0
+-e git+https://github.com/orojas12/heka-api.git@57cd0b7b1c346b6e0222118423ee2f282fb79377#egg=heka_api
+itsdangerous==1.1.0
+Jinja2==2.11.3
+MarkupSafe==1.1.1
+marshmallow==3.10.0
+marshmallow-sqlalchemy==0.24.2
+python-dotenv==0.15.0
+six==1.15.0
+SQLAlchemy==1.4.2
+Werkzeug==1.0.1
