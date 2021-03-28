@@ -6,5 +6,6 @@ venv/
 *.egg-info
 .flaskenv
 *.pyc
+.vscode
 
 __pycache__/
