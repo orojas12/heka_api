@@ -7,5 +7,6 @@ venv/
 .flaskenv
 *.pyc
 .vscode
+.pytest_cache
 
 __pycache__/

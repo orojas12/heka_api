@@ -12,6 +12,8 @@ def post_vaccine():
   data = request.get_json()
   vaccine_schema = VaccineSchema()
   vaccine = vaccine_schema.load(data)
+  db.session.add(vaccine)
+  db.session.commit()
   return vaccine.__repr__()
 
 

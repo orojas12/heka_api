@@ -31,3 +31,5 @@ class VaccineSchema(ma.SQLAlchemySchema):
     def to_object(self, data, **kwargs):
         return VaccineContainer(**data)
 
+# class DistributionCenter(db.Model):
+#     __table__ = db.Model.metadata.tables['distribution_centers']
