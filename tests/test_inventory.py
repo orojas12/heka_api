@@ -32,14 +32,25 @@ def test_duplicate_vaccines_post(client):
     assert response.status_code == 409
 
 def test_not_found(client):
-    response = client.get('/inventory/vaccines/1')
-    assert response.status_code == 404
+    vaccines_response = client.get('/inventory/vaccines/-1')
+    assert vaccines_response.status_code == 404
+    orders_response = client.get('/inventory/orders/-1')
+    assert orders_response.status_code == 404
+    order_vaccines_response = client.get('/inventory/orders/-1/vaccines')
+    assert order_vaccines_response.status_code == 404
+    customers_response = client.get('/inventory/customers/-1')
+    assert customers_response.status_code == 404
+    manufacturers_response = client.get('/inventory/manufacturers/-1')
+    assert manufacturers_response.status_code == 404
 
 def test_orders_get(client):
-    response = client.get('/inventory/orders/1')
-    assert response.status_code == 200
-    response = client.get('/inventory/orders')
-    assert response.status_code == 200
+    order_response = client.get('/inventory/orders/1')
+    assert order_response.status_code == 200
+    orders_response = client.get('/inventory/orders')
+    assert orders_response.status_code == 200
+    order_vaccines_response = client.get('/inventory/orders/1/vaccines')
+    assert order_vaccines_response.status_code == 200
+
 
 # def test_orders_post(client):
 #     response = client.post('/inventory/orders', json={
