@@ -14,9 +14,6 @@ def create_app(**test_config):
   db.init_app(app)
   ma.init_app(app)
 
-  with app.app_context():
-    db.Model.metadata.reflect(bind=db.engine)
-
   from . import inventory
   app.register_blueprint(inventory.bp)
 
