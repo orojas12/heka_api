@@ -4,21 +4,52 @@ Heka API is a web service used internally by Heka Distribution LLC to support cr
 
 ## Getting Started
 
-Clone this project to your computer.
+Ensure you have at least Python 3.6+ installed:
+
+> python3 --version
+
+Clone this project to your computer:
 
 > git clone https://github.com/orojas12/heka_api.git
 
+Navigate to your project folder, create a virtualenv and activate it:
 
+> cd /path/to/project/folder
+> python3 -m venv venv
+> source venv/bin/activate
+
+Install dependencies:
+
+> pip install -r requirements.txt
+
+## Development/Testing
+
+To run the Flask development server, set FLASK_APP and FLASK_ENV environment variables:
+
+> export FLASK_APP=heka_api
+> export FLASK_ENV=development
+
+You can also set these in a .env file in the project folder to avoid doing it every time in a new terminal session:
+
+> touch .env
+> echo "FLASK_APP=heka_api" >> .env
+> echo "FLASK_ENV=development" >> .env
+
+Then run the development server.
+
+> flask run
+
+## Deployment
 
 ## API Reference
 
-Get all orders placed.
+Get all orders placed:
 
 > GET  /api/orders
 
 ---
 
-Get data for a specific order.
+Get data for a specific order:
 
 > GET  /api/orders/<order_id>
 
@@ -28,7 +59,7 @@ Get data for a specific order.
 
 ---
 
-Create a new order.
+Create a new order:
 
 > POST  /api/orders
 
@@ -74,13 +105,13 @@ Create a new order.
 
 ---
 
-Get all customers.
+Get all customers:
 
 > GET  /api/customers
 
 ---
 
-Create a new customer.
+Create a new customer:
 
 > POST  /api/customers
 
@@ -114,7 +145,7 @@ Create a new customer.
 
 ---
 
-Get data for a specific customer.
+Get data for a specific customer:
 
 > GET  /api/customers/<customer_id>
 
@@ -124,7 +155,7 @@ Get data for a specific customer.
 
 ---
 
-Get all vaccine manufacturers.
+Get all vaccine manufacturers:
 
 > GET /api/manufacturers
 
