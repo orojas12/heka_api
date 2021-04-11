@@ -4,9 +4,11 @@ Heka API is a web service used internally by Heka Distribution LLC to support cr
 
 ## Getting Started
 
-## API Reference
+Clone this project to your computer.
 
-### Vaccine Orders
+> git clone https://github.com/orojas12/heka_api.git
+
+## API Reference
 
 Get all orders placed.
 
