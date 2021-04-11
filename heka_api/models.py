@@ -9,7 +9,7 @@ class VaccineContainer(db.Model):
     __tablename__ = 'vaccine_containers'
 
     id = db.Column(db.String(100), primary_key=True)
-    order_id = db.Column(db.Integer)
+    order_id = db.Column(db.String(100))
     manufacturer_id = db.Column(db.Integer, db.ForeignKey('manufacturers.id'))
     dist_center = db.Column(db.Integer, db.ForeignKey('distribution_centers.id'))
 
@@ -76,7 +76,7 @@ class CustomerSchema(ma.SQLAlchemyAutoSchema):
 class Order(db.Model):
     __tablename__ = 'orders'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(100), primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
     ship_address_same_as_customer = db.Column(db.Boolean)
     ship_street = db.Column(db.String(50))
@@ -91,6 +91,9 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Order
         include_fk = True
+        
+    id = ma.String(required=False)
+    vaccines = ma.List(ma.Nested(VaccineSchema, only=('id', 'manufacturer_id')))
     
     @post_load
     def to_object(self, data, **kwargs):
