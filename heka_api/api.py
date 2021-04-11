@@ -95,25 +95,6 @@ def get_order(id):
 	schema = OrderSchema()
 	return jsonify(schema.dump(order)), 200
 
-# @bp.route('/orders/<order_id>/vaccines', methods=['POST'])
-# def add_vaccines_to_order(order_id):
-# 	vaccine_orders = request.get_json()
-	
-# 	for vaccine_order in vaccine_orders:
-# 		available_vaccines = VaccineContainer.query.filter_by(
-# 				order_id=None,
-# 				manufacturer_id=vaccine_order['manufacturer_id']
-# 			).limit(vaccine_order['quantity']).all()
-		
-# 		if len(available_vaccines) < vaccine_order['quantity']:
-# 			abort(404, description="Not enough supply.")
-
-# 		for vaccine in available_vaccines:
-# 			vaccine.order_id = order_id
-
-# 	db.session.commit()
-# 	return jsonify("Vaccines added to order."), 200
-
 
 ### CUSTOMERS ###
 @bp.route('/customers', methods=['GET'])

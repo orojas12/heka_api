@@ -8,23 +8,25 @@ Heka API is a web service used internally by Heka Distribution LLC to support cr
 
 ### Vaccine Orders
 
-> GET /api/orders
+Get all orders placed.
 
-Get an array of all orders placed.
+> GET  /api/orders
 
-> GET /api/orders/<order_id>
+---
+
+Get data for a specific order.
+
+> GET  /api/orders/<order_id>
 
 | Parameter | Description                                                 |
 |-----------|-------------------------------------------------------------|
 | order_id  | UUID of order (e.g. "abb9dc99-0694-414e-b26f-920f20500fd9") |
 
-Get data for a specific order.
-
 ---
 
-> POST /api/orders
-
 Create a new order.
+
+> POST  /api/orders
 
 ```json
 {
@@ -68,9 +70,15 @@ Create a new order.
 
 ---
 
-> POST  /api/customers
+Get all customers.
+
+> GET  /api/customers
+
+---
 
 Create a new customer.
+
+> POST  /api/customers
 
 ```json
 {
@@ -102,3 +110,18 @@ Create a new customer.
 
 ---
 
+Get data for a specific customer.
+
+> GET  /api/customers/<customer_id>
+
+| Parameter | Description                                                 |
+|-----------|-------------------------------------------------------------|
+| customer_id | Customer ID number |
+
+---
+
+Get all vaccine manufacturers.
+
+> GET /api/manufacturers
+
+---
