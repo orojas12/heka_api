@@ -4,7 +4,6 @@ Flask==1.1.2
 flask-marshmallow==0.14.0
 Flask-SQLAlchemy==2.5.1
 greenlet==1.0.0
--e git+git@github.com:orojas12/heka_api.git@b12917273f7f1279c4fb0e5e5662272f26decb8d#egg=heka_api
 iniconfig==1.1.1
 itsdangerous==1.1.0
 Jinja2==2.11.3

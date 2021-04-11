@@ -1,5 +1,4 @@
 from flask import Flask
-import pprint
 
 def create_app(**test_config):
 	app = Flask(__name__)
