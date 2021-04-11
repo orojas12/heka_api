@@ -7,17 +7,6 @@ from .helpers import separate_order_vaccine_data, add_vaccines_to_order
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
-## INSERT MORE VACCINES (TESTING ONLY!!! DO NOT DEPLOY THIS ROUTE!)
-@bp.route('/vaccines/insert', methods=['POST'])
-def make_more_vaccines():
-	for _ in range(3):
-		db.session.add(VaccineContainer(id=uuid4(), manufacturer_id=1, dist_center=1))
-		db.session.add(VaccineContainer(id=uuid4(), manufacturer_id=2, dist_center=1))
-		db.session.add(VaccineContainer(id=uuid4(), manufacturer_id=3, dist_center=1))
-	db.session.commit()
-	return jsonify("Vaccines created successfully."), 200
-
-
 ### VACCINES ###
 @bp.route('/vaccines', methods=['GET'])
 def get_vaccines():
