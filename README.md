@@ -182,8 +182,9 @@ curl -X GET https://localhost:5000/api/orders
 
 Get data for a specific order:
 
-> GET  /api/orders/<order_id>
-
+```bash
+curl -X GET http://example.com/api/orders/<order_id>
+```
 | Parameter | Description                                                 |
 |-----------|-------------------------------------------------------------|
 | order_id  | UUID of order (e.g. "abb9dc99-0694-414e-b26f-920f20500fd9") |
