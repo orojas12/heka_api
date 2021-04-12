@@ -6,11 +6,15 @@ Heka API is a web service used internally by Heka Distribution LLC to support it
 
 Ensure you have at least Python 3.6+ installed:
 
-> $ python3 --version
+```bash
+python3 --version
+```
 
 Clone this project to your computer:
 
-> $ git clone https://github.com/orojas12/heka_api.git
+```bash
+git clone https://github.com/orojas12/heka_api.git
+```
 
 Navigate to your cloned project folder, create a virtualenv and activate it:
 
@@ -156,7 +160,7 @@ sudo ufw allow 'Nginx Full'
 You should now be able to make http requests to your server's ip address or domain name:
 
 ```bash
-curl -X GET http:{ipaddress}/api/orders
+curl -X GET http://example.com/api/orders
 ```
 
 If you encounter any errors try checking the following logs:
@@ -292,3 +296,11 @@ Get all vaccine manufacturers:
 ```bash
 curl -X GET https://localhost:5000/api/manufacturers
 ```
+
+## License
+
+This project is licensed under the [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
+
+## Contributors
+
+Oscar Rojas - [orojas12](https://github.com/orojas12)
