@@ -1,45 +1,139 @@
 # Heka API
 
-Heka API is a web service used internally by Heka Distribution LLC to support critical business operations.
+Heka API is a web service used internally by Heka Distribution LLC to support its vaccine distribution system.
 
 ## Getting Started
 
 Ensure you have at least Python 3.6+ installed:
 
-> python3 --version
+> $ python3 --version
 
 Clone this project to your computer:
 
-> git clone https://github.com/orojas12/heka_api.git
+> $ git clone https://github.com/orojas12/heka_api.git
 
-Navigate to your project folder, create a virtualenv and activate it:
+Navigate to your cloned project folder, create a virtualenv and activate it:
 
-> cd /path/to/project/folder
-> python3 -m venv venv
-> source venv/bin/activate
+> $ cd /path/to/project/folder
+> $ python3 -m venv venv
+> $ source venv/bin/activate
 
 Install dependencies:
 
-> pip install -r requirements.txt
+> $ pip install -r requirements.txt
 
 ## Development/Testing
 
 To run the Flask development server, set FLASK_APP and FLASK_ENV environment variables:
 
-> export FLASK_APP=heka_api
-> export FLASK_ENV=development
+> $ export FLASK_APP=heka_api
+> $ export FLASK_ENV=development
 
-You can also set these in a .env file in the project folder to avoid doing it every time in a new terminal session:
+You can also set these in a .env file in the project folder for persistence:
 
-> touch .env
-> echo "FLASK_APP=heka_api" >> .env
-> echo "FLASK_ENV=development" >> .env
+> $ touch .env
+> $ echo "FLASK_APP=heka_api" >> .env
+> $ echo "FLASK_ENV=development" >> .env
 
 Then run the development server.
 
-> flask run
+> $ flask run
+
+When development/testing is done, you can deactivate your virtual environment:
+
+> $ deactivate
 
 ## Deployment
+
+Before deploying, make sure you add your own production configuration to a .env file in the project folder.
+
+Example:
+
+> SQLALCHEMY_DATABASE_URI={your_production_database_uri}
+> DEBUG=False
+> TESTING=False
+
+Heka API uses Gunicorn as a WSGI http server for use with a reverse proxy such as Nginx. **Do not use the flask development server for production.**
+
+### Deploying with Nginx
+
+Create a systemd service unit file so the operating system can automatically start Gunicorn and serve the application on startup:
+
+> $ sudo nano /etc/systemd/system/heka_api.service
+
+Insert this configuration, replacing anything inside {} with your own:
+
+```service
+[Unit]
+Description=Gunicorn instance to serve heka_api
+After=network.target
+
+[Service]
+User={user}
+Group={group}
+WorkingDirectory=/home/{user}/heka_api
+Environment="PATH=/home/{user}/heka_api/venv/bin"
+ExecStart=/home/{user}/heka_api/venv/bin/gunicorn -w 4 -b 0.0.0.0:8000 "heka_api:create_app()"
+
+[Install]
+WantedBy=multi-user.target
+```
+
+You can now start the heka_api service and enable it so it starts on boot:
+
+> $ sudo systemctl start heka_api
+> $ sudo systemctl enable heka_api
+
+Check the status to see if it is running correctly:
+
+> $ sudo systemctl status heka_api
+
+Create the nginx server configuration for heka_api:
+
+> $ sudo nano /etc/nginx/sites-available/heka_api
+
+Insert this configuration, replacing anyting inside {} with your own:
+
+```
+server {
+    listen 80;
+    server_name {your_domain} {www.your_domain} # if using static ip address, you can omit this line.
+
+    location / {
+        include proxy_params;
+        proxy_pass http:127.0.0.1:8000;
+    }
+}
+```
+
+To enable the nginx server that was just created, link the file to the *sites-enabled* directory:
+
+> $ sudo ln -s /etc/nginx/sites-available/heka_api /etc/nginx/sites-enabled
+
+Test the file for syntax errors:
+
+> $ sudo nginx -t
+
+Restart nginx to read the new configuration:
+
+> $ sudo systemctl restart nginx
+
+**Note:** Ensure that *default* is removed from /etc/nginx/sites-enabled to prevent duplicate server errors.
+
+Finally, adjust your firewall to allow incoming requests on port 80:
+
+> $ sudo ufw allow 'Nginx Full'
+
+You should now be able to make http requests to your server's ip address or domain name:
+
+> $ curl -X GET http:{ipaddress}/api/orders
+
+If you encounter any errors try checking the following logs:
+
+> $ sudo less /var/log/nginx/error.log
+> $ sudo less /var/los/nginx/access.log
+> $ sudo journalctl -u nginx
+> $ sudo journalctl -u heka_api
 
 ## API Reference
 
