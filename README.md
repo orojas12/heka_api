@@ -30,22 +30,30 @@ pip install -r requirements.txt
 
 To run the Flask development server, set FLASK_APP and FLASK_ENV environment variables:
 
-> $ export FLASK_APP=heka_api
-> $ export FLASK_ENV=development
+```bash
+export FLASK_APP=heka_api
+export FLASK_ENV=development
+```
 
 You can also set these in a .env file in the project folder for persistence:
 
-> $ touch .env
-> $ echo "FLASK_APP=heka_api" >> .env
-> $ echo "FLASK_ENV=development" >> .env
+```bash
+touch .env
+echo "FLASK_APP=heka_api" >> .env
+echo "FLASK_ENV=development" >> .env
+```
 
 Then run the development server.
 
-> $ flask run
+```bash
+flask run
+```
 
 When development/testing is done, you can deactivate your virtual environment:
 
-> $ deactivate
+```bash
+deactivate
+```
 
 ## Deployment
 
@@ -53,9 +61,11 @@ Before deploying, make sure you add your own production configuration to a .env 
 
 Example:
 
-> SQLALCHEMY_DATABASE_URI={your_production_database_uri}
-> DEBUG=False
-> TESTING=False
+```
+SQLALCHEMY_DATABASE_URI={your_production_database_uri}
+DEBUG=False
+TESTING=False
+```
 
 Heka API uses Gunicorn as a WSGI http server for use with a reverse proxy such as Nginx. **Do not use the flask development server for production.**
 
@@ -63,11 +73,12 @@ Heka API uses Gunicorn as a WSGI http server for use with a reverse proxy such a
 
 Create a systemd service unit file so the operating system can automatically start Gunicorn and serve the application on startup:
 
-> $ sudo nano /etc/systemd/system/heka_api.service
-
+```bash
+sudo nano /etc/systemd/system/heka_api.service
+```
 Insert this configuration, replacing anything inside {} with your own:
 
-```service
+```
 [Unit]
 Description=Gunicorn instance to serve heka_api
 After=network.target
@@ -85,16 +96,22 @@ WantedBy=multi-user.target
 
 You can now start the heka_api service and enable it so it starts on boot:
 
-> $ sudo systemctl start heka_api
-> $ sudo systemctl enable heka_api
+```bash
+sudo systemctl start heka_api
+sudo systemctl enable heka_api
+```
 
 Check the status to see if it is running correctly:
 
-> $ sudo systemctl status heka_api
+```bash
+sudo systemctl status heka_api
+```
 
 Create the nginx server configuration for heka_api:
 
-> $ sudo nano /etc/nginx/sites-available/heka_api
+```bash
+sudo nano /etc/nginx/sites-available/heka_api
+```
 
 Insert this configuration, replacing anyting inside {} with your own:
 
@@ -112,40 +129,52 @@ server {
 
 To enable the nginx server that was just created, link the file to the *sites-enabled* directory:
 
-> $ sudo ln -s /etc/nginx/sites-available/heka_api /etc/nginx/sites-enabled
+```bash
+sudo ln -s /etc/nginx/sites-available/heka_api /etc/nginx/sites-enabled
+```
 
 Test the file for syntax errors:
 
-> $ sudo nginx -t
+```bash
+sudo nginx -t
+```
 
 Restart nginx to read the new configuration:
 
-> $ sudo systemctl restart nginx
+```bash
+sudo systemctl restart nginx
+```
 
-**Note:** Ensure that *default* is removed from /etc/nginx/sites-enabled to prevent duplicate server errors.
+> Note: Ensure that *default* is removed from /etc/nginx/sites-enabled to prevent duplicate server errors.
 
 Finally, adjust your firewall to allow incoming requests on port 80:
 
-> $ sudo ufw allow 'Nginx Full'
+```bash
+sudo ufw allow 'Nginx Full'
+```
 
 You should now be able to make http requests to your server's ip address or domain name:
 
-> $ curl -X GET http:{ipaddress}/api/orders
+```bash
+curl -X GET http:{ipaddress}/api/orders
+```
 
 If you encounter any errors try checking the following logs:
 
-> $ sudo less /var/log/nginx/error.log
-> $ sudo less /var/los/nginx/access.log
-> $ sudo journalctl -u nginx
-> $ sudo journalctl -u heka_api
+```bash
+sudo less /var/log/nginx/error.log
+sudo less /var/los/nginx/access.log
+sudo journalctl -u nginx
+sudo journalctl -u heka_api
+```
 
 ## API Reference
 
 Get all orders placed:
 
-> GET  /api/orders
-
----
+```bash
+curl -X GET https://localhost:5000/api/orders
+```
 
 Get data for a specific order:
 
@@ -155,11 +184,12 @@ Get data for a specific order:
 |-----------|-------------------------------------------------------------|
 | order_id  | UUID of order (e.g. "abb9dc99-0694-414e-b26f-920f20500fd9") |
 
----
-
 Create a new order:
 
-> POST  /api/orders
+```bash
+curl -X POST http://localhost:5000/api/orders
+```
+JSON body example:
 
 ```json
 {
@@ -205,13 +235,17 @@ Create a new order:
 
 Get all customers:
 
-> GET  /api/customers
-
----
+```bash
+curl -X GET https://localhost:5000/api/customers
+```
 
 Create a new customer:
 
-> POST  /api/customers
+```bash
+curl -X POST http://localhost:5000/api/customers
+```
+
+JSON body example:
 
 ```json
 {
@@ -241,11 +275,11 @@ Create a new customer:
 | zip         | yes      | string | The customer's zip code.                                                                                   |
 | dist_center | yes      | number | The ID of the Heka Distribution center serving the customer's city. (1 = El Paso, 2 = Dallas, 3 = Houston) |
 
----
-
 Get data for a specific customer:
 
-> GET  /api/customers/<customer_id>
+```bash
+curl -X GET https://localhost:5000/api/customers/<customer_id>
+```
 
 | Parameter | Description                                                 |
 |-----------|-------------------------------------------------------------|
@@ -255,6 +289,6 @@ Get data for a specific customer:
 
 Get all vaccine manufacturers:
 
-> GET /api/manufacturers
-
----
+```bash
+curl -X GET https://localhost:5000/api/manufacturers
+```
