@@ -14,13 +14,17 @@ Clone this project to your computer:
 
 Navigate to your cloned project folder, create a virtualenv and activate it:
 
-> $ cd /path/to/project/folder
-> $ python3 -m venv venv
-> $ source venv/bin/activate
+```bash
+cd /path/to/project/folder
+python3 -m venv venv
+source venv/bin/activate
+```
 
 Install dependencies:
 
-> $ pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
+```
 
 ## Development/Testing
 
