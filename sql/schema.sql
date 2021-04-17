@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS vaccine_containers;
-DROP TABLE IF EXISTS ancillary_kits;
+DROP TABLE IF EXISTS vaccine_units;
+DROP TABLE IF EXISTS medical_supplies;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS employees;
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS orders (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE IF NOT EXISTS vaccine_containers (
+CREATE TABLE IF NOT EXISTS vaccine_units (
   id VARCHAR(100) PRIMARY KEY,
   order_id VARCHAR(100),
   manufacturer_id INT NOT NULL,
@@ -82,8 +82,9 @@ CREATE TABLE IF NOT EXISTS vaccine_containers (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE IF NOT EXISTS ancillary_kits (
+CREATE TABLE IF NOT EXISTS medical_supplies (
   id VARCHAR(100) PRIMARY KEY,
+  description VARCHAR(100),
   order_id VARCHAR(100),
   manufacturer_id INT NOT NULL,
   dist_center INT NOT NULL,

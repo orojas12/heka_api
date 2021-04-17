@@ -5,8 +5,8 @@ from marshmallow import post_load
 db = SQLAlchemy()
 ma = Marshmallow()
 
-class VaccineContainer(db.Model):
-    __tablename__ = 'vaccine_containers'
+class Vaccine(db.Model):
+    __tablename__ = 'vaccine_units'
 
     id = db.Column(db.String(100), primary_key=True)
     order_id = db.Column(db.String(100))
@@ -15,12 +15,12 @@ class VaccineContainer(db.Model):
 
 class VaccineSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = VaccineContainer
+        model = Vaccine
         include_fk = True
 
     @post_load
     def to_object(self, data, **kwargs):
-        return VaccineContainer(**data)
+        return Vaccine(**data)
 
 class Manufacturer(db.Model):
     __tablename__ = 'manufacturers'

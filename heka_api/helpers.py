@@ -1,5 +1,5 @@
 # UTILITY FUNCTIONS
-from .models import db, VaccineContainer
+from .models import db, Vaccine
 
 def separate_order_vaccine_data(order_data):
     vaccine_data = []
@@ -14,13 +14,16 @@ def separate_order_vaccine_data(order_data):
     return [order_data, vaccine_data]
 
 def add_vaccines_to_order(vaccine_data, order):
-    for vaccine in vaccine_data:
-        available = VaccineContainer.query \
-        .filter_by(order_id=None, manufacturer_id=vaccine['manufacturer_id']) \
-        .limit(vaccine['quantity']).all()
+    available = []
+    for item in vaccine_data:
+        results = Vaccine.query \
+        .filter_by(order_id=None, manufacturer_id=item['manufacturer_id']) \
+        .limit(item['quantity']).all()
 
-    if len(available) < vaccine['quantity']:
-        raise Exception("Not enough vaccine supply.")
+        if len(results) < item['quantity']:
+            raise Exception("Not enough vaccine supply.")
+
+        available.extend(results)
 
     for vaccine in available:
         vaccine.order_id = order.id

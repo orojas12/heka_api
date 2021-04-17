@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, abort
 from sqlalchemy.exc import IntegrityError
 from marshmallow.exceptions import ValidationError
-from .models import db, VaccineContainer, VaccineSchema, Order, OrderSchema, Customer, CustomerSchema, Manufacturer, ManufacturerSchema
+from .models import db, Vaccine, VaccineSchema, Order, OrderSchema, Customer, CustomerSchema, Manufacturer, ManufacturerSchema
 from uuid import uuid4
 from .helpers import separate_order_vaccine_data, add_vaccines_to_order
 
@@ -10,7 +10,7 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 ### VACCINES ###
 @bp.route('/vaccines', methods=['GET'])
 def get_vaccines():
-	data = db.session.query(VaccineContainer).all()
+	data = db.session.query(Vaccine).all()
 	schema = VaccineSchema(many=True)
 	return jsonify(schema.dump(data)), 200
 
@@ -29,7 +29,7 @@ def post_vaccine():
 
 @bp.route('/vaccines/<id>', methods=['GET'])
 def get_vaccine(id):
-	data = VaccineContainer.query.filter_by(id=id).first()
+	data = Vaccine.query.filter_by(id=id).first()
 	if not data:
 		abort(404, description="Vaccine with id of {} does not exist.".format(id))
 	schema = VaccineSchema()
@@ -55,7 +55,8 @@ def create_order():
 	try:
 		[order_data, vaccine_data] = separate_order_vaccine_data(json)
 		order = schema.load(order_data)
-		order.id = uuid4()
+		order_id = uuid4()
+		order.id = order_id
 		add_vaccines_to_order(vaccine_data, order)
 	except Exception as error:
 		db.session.rollback()
@@ -66,7 +67,7 @@ def create_order():
 
 	db.session.add(order)
 	db.session.commit()
-	return jsonify("Order created successfully."), 200
+	return jsonify(order_id=order_id, status="created"), 200
 
 @bp.route('/orders/<id>', methods=['GET'])
 def get_order(id):
@@ -75,7 +76,7 @@ def get_order(id):
 	if not order:
 		abort(404, description="Order with id of {} does not exist.".format(id))
 
-	vaccines = VaccineContainer.query.filter_by(order_id=id).all()
+	vaccines = Vaccine.query.filter_by(order_id=id).all()
 
 	if not vaccines:
 		abort(404, description="No vaccines have been added to this order.")
@@ -83,6 +84,15 @@ def get_order(id):
 	order.vaccines = vaccines
 	schema = OrderSchema()
 	return jsonify(schema.dump(order)), 200
+
+# @bp.route('/orders/<id>', methods=['DELETE'])
+# def delete_order(id):
+#     order = Order.query.filter_by(id=id).first()
+#     if not order:
+#         abort(404, description="Order with ID of {} does not exist.".format(id))
+#     db.session.delete(order)
+#     db.session.commit()
+#     return jsonify("order deleted."), 200
 
 
 ### CUSTOMERS ###
@@ -114,6 +124,15 @@ def get_customer(id):
 		abort(404, description="Customer with id of {} does not exist.".format(id))
 	schema = CustomerSchema()
 	return jsonify(schema.dump(data)), 200
+
+@bp.route('/customers/<id>', methods=['DELETE'])
+def delete_customer(id):
+    customer = Customer.query.filter_by(id=id).first()
+    if not customer:
+        abort(404, description="Customer with ID of {} does not exist.".format(id))
+    db.session.delete(customer)
+    db.session.commit()
+    return jsonify("Customer deleted."), 200
 
 
 ### MANUFACTURERS ###
