@@ -1,6 +1,6 @@
 # Heka API
 
-Heka API is a web service used internally by Heka Distribution LLC to support its vaccine distribution system.
+Heka API is a web service used internally by Heka Distribution LLC to support its vaccine distribution system. Its main function is to support CRUD operations on critical business data.
 
 ## Getting Started
 
